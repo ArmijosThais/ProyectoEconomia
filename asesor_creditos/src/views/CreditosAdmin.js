@@ -4,6 +4,7 @@ import CircleEditIcon from '../components/CircleEditIcon';
 import '../styles/CreditosAdmin.css';
 import CoverNewIcon from '../components/CoverNewIcon';
 import { useNavigate } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
 
 const Credito = (props) => {
   return (
@@ -11,8 +12,14 @@ const Credito = (props) => {
       <h4>{props.name}</h4>
       <p className="text-muted">Tasa de Interés: {props.interes}%</p>
       <div className="acciones">
-        <CircleCancelIcon width={30} height={24} fill="#000" />
-        <CircleEditIcon width={30} height={24} fill="#000" />
+        <>
+          <Button variant="light" style={{ marginLeft: '10px' }}>
+            <CircleCancelIcon width={30} height={24} fill="#000" />
+          </Button>
+          <Button variant="light">
+            <CircleEditIcon width={30} height={24} fill="#000" />
+          </Button>
+        </>
       </div>
     </div>
   );
@@ -88,32 +95,45 @@ function CreditosAdmin() {
 
   return (
     <div>
-      <div className="row">
-        {tiposCredito.map((tipo) => {
-          return (
-            <div className="snack" onClick={handleSelectTipo}>
-              <h4>{tipo.name}</h4>
-            </div>
-          );
-        })}
-        <CoverNewIcon width={45} height={30} fill="#000" />
-      </div>
-      <hr />
-      <div className="newButton">
-        <div className="newButton" onClick={handleNuevoCredito}>
-          <CoverNewIcon width={45} height={30} fill="#000" />
-        </div>
-        <div className="cells">
-          {creditos.map((credito) => {
+      <div
+        style={{
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          width: 'fit-content',
+        }}
+      >
+        <>
+          {tiposCredito.map((tipo) => {
             return (
-              <Credito
-                key={credito.id}
-                name={credito.name}
-                interes={credito.interes}
-              />
+              <Button
+                variant="outline-secondary"
+                style={{ marginLeft: '10px' }}
+              >
+                {tipo.name}
+              </Button>
             );
           })}
-        </div>
+          <Button variant="outline-light">
+            <CoverNewIcon width={45} height={30} fill="#000" />
+          </Button>
+        </>
+      </div>
+      <hr />
+      <div className="newButton" onClick={handleNuevoCredito}>
+        <Button variant="outline-light">
+          <CoverNewIcon width={45} height={30} fill="#000" />
+        </Button>
+      </div>
+      <div className="cells">
+        {creditos.map((credito) => {
+          return (
+            <Credito
+              key={credito.id}
+              name={credito.name}
+              interes={credito.interes}
+            />
+          );
+        })}
       </div>
     </div>
   );
