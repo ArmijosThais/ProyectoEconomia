@@ -109,7 +109,11 @@ function Simulator() {
 
   return (
     <div>
-      <Header iconSide={<MenuIcon />} button={'Acceder'} />
+      <Header
+        iconSide={<MenuIcon />}
+        button={'Acceder'}
+        destination={'/login'}
+      />
       <Carousel />
       <text
         style={{

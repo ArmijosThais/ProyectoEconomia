@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-function Header({ iconSide, button }) {
+function Header({ iconSide, button, destination }) {
   const icon =
     'https://upload.wikimedia.org/wikipedia/commons/c/cc/Banco-Pichincha.png';
   const institutionName = 'Banco Pichincha';
@@ -58,7 +58,7 @@ function Header({ iconSide, button }) {
         </text>
       </div>
       <Link
-        to="/login"
+        to={destination}
         style={{
           height: '40px',
           width: '150px',
