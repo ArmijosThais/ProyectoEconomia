@@ -1,0 +1,78 @@
+h2 {
+  margin: 0;
+  text-align: left; /* Establece el margen superior e inferior en 0 */
+}
+
+form{
+  margin: 3%;
+  padding: 5%;
+  border-radius: 25px;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  width: 60vw;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: white;
+  border-radius: 25px;
+}
+
+.logo-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 40vw;
+  margin: 5%;
+}
+
+.form-section {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-section form {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+}
+
+.form-section form input {
+  margin-bottom: 20px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.form-section form button {
+  padding: 10px;
+  font-size: 16px;
+  background-color: rgb(0, 123, 255);
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 20px;
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.footer-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.imagen {
+  width: 400px; /* Configura el ancho de la imagen al 100% del contenedor */
+}
+

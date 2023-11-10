@@ -1,23 +1,21 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Header from './Header';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './components/Header';
+import Login from './views/Login.js';
+import CreditosAdmin from './views/CreditosAdmin.js';
 
 function App() {
   return (
-    <Router>
-      <Header />
-
-    </Router>
+    <div>
+      <Router>
+        <Header />
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/credPrueba" element={<CreditosAdmin />} />
+        </Routes>
+      </Router>
+    </div>
   );
 }
 
 export default App;
-
-/*
-<Switch>
-        <Route path="/pagina1" component={Page1} />
-        <Route path="/pagina2" component={Page2} />
-        <Route path="/" component={HomePage} />
-      </Switch>
-
-*/
