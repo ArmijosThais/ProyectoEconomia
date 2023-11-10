@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from '../components/Header';
-import Login from './Login.js';
-import CreditosAdmin from './CreditosAdmin.js';
 import Carousel from '../components/slickCarousel';
 import { CompactTable } from '@table-library/react-table-library/compact';
 import { useTheme } from '@table-library/react-table-library/theme';
@@ -10,6 +7,7 @@ import { getTheme } from '@table-library/react-table-library/baseline';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
+import MenuIcon from '../icons/menuIcon';
 
 function Simulator() {
   const nodes = [
@@ -111,7 +109,11 @@ function Simulator() {
 
   return (
     <div>
-      <Header />
+      <Header
+        iconSide={<MenuIcon />}
+        button={'Acceder'}
+        destination={'/login'}
+      />
       <Carousel />
       <text
         style={{
