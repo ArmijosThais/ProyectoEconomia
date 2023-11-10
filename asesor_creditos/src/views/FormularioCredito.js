@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import '../styles/FormularioCredito.css';
+import Header from '../components/Header';
+import ArrowLeftLine from '../icons/arrowLeftLine';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Button from 'react-bootstrap/esm/Button';
 //hola
 const FormularioCredito = () => {
   const [formData, setFormData] = useState({
@@ -37,66 +41,82 @@ const FormularioCredito = () => {
   };
 
   return (
-    <form className='formcredito' onSubmit={handleSubmit}>
-      <h1>Datos del Crédito</h1>
-      <label>
-        <h3>Requisitos:</h3>
-        <textarea name="requisitos" onChange={handleInputChange} />
-      </label>
-      <label>
-        <h3>Interés</h3>
-        Tasa de interés (%):
-        <input
-          type="number"
-          step="0.01"
-          name="tasaDeInteres"
-          onChange={handleInputChange}
-        />
-      </label>
-      <label>
-        <h3>Plazos</h3>
-        Plazo Máximo (número de meses):
-        <input type="number" name="plazos" onChange={handleInputChange} />
-      </label>
-      <label>
-        <h3>Montos</h3>
-        Monto Máximo ($):
-        <input
-          type="number"
-          step="0.01"
-          name="montoMaximo"
-          onChange={handleInputChange}
-        />
-        Monto Mínimo($):
-        <input
-          type="number"
-          step="0.01"
-          name="cobrosMinimos"
-          onChange={handleInputChange}
-        />
-      </label>
-      <label>
-        <h3>Cobros Indirectos</h3>
-        <div className="">
-          {cobrosIndirectos.map((cobro) => {
-           return (
-             <div className="">
-               <h4>{cobro.name}</h4>
-               <input
-                 type="number"
-                 step="0.01"
-                 name="cobrosMinimos"
-               />
-             </div>
-           );
-          })}
-        </div>
-      </label>
-      <div className="row">
-        <input type="submit" value="Guardar" />
-        <button type="button">Cancelar</button>
+    <div>
+      <Header iconSide={<ArrowLeftLine />} button={'Salir'} destination={'/'} />
+      <div style={{ width: '30vw', marginLeft: 'auto', marginRight: 'auto' }}>
+        <h3>Datos del Crédito</h3>
+        <br />
+        <Form onSubmit={handleSubmit}>
+          <h5>Requisitos</h5>
+          <Form.Group className="mb-3">
+            <Form.Control
+              as="textarea"
+              aria-label="With textarea"
+              onChange={handleInputChange}
+            />
+          </Form.Group>
+          <h5>Interés</h5>
+          <InputGroup className="mb-3">
+            <Form.Control aria-label="Amount (to the nearest dollar)" />
+            <InputGroup.Text>%</InputGroup.Text>
+          </InputGroup>
+          <h5>Plazos</h5>
+          <InputGroup className="mb-3">
+            <Form.Control aria-label="Amount (to the nearest dollar)" />
+            <InputGroup.Text>Meses</InputGroup.Text>
+          </InputGroup>
+          <h5>Montos</h5>
+          <p>Monto Máximo</p>
+          <InputGroup className="mb-3">
+            <InputGroup.Text>$</InputGroup.Text>
+            <Form.Control aria-label="Amount (to the nearest dollar)" />
+            <InputGroup.Text>.00</InputGroup.Text>
+          </InputGroup>
+          <p>Monto Mínimo</p>
+          <InputGroup className="mb-3">
+            <InputGroup.Text>$</InputGroup.Text>
+            <Form.Control aria-label="Amount (to the nearest dollar)" />
+            <InputGroup.Text>.00</InputGroup.Text>
+          </InputGroup>
+          <h5>Cobros Indirectos</h5>
+          <p>Seguros</p>
+          <InputGroup className="mb-3">
+            <InputGroup.Text>$</InputGroup.Text>
+            <Form.Control aria-label="Amount (to the nearest dollar)" />
+            <InputGroup.Text>.00</InputGroup.Text>
+          </InputGroup>
+          <p>Donaciones a Fundaciones</p>
+          <InputGroup className="mb-3">
+            <InputGroup.Text>$</InputGroup.Text>
+            <Form.Control aria-label="Amount (to the nearest dollar)" />
+            <InputGroup.Text>.00</InputGroup.Text>
+          </InputGroup>
+          <Button
+            variant="primary"
+            type="submit"
+            style={{
+              width: '10vw',
+              marginTop: '20px',
+              marginRight: '2vw',
+              marginLeft: '4vw',
+            }}
+          >
+            Guardar
+          </Button>
+          <Button
+            variant="danger"
+            style={{
+              width: '10vw',
+              marginTop: '20px',
+              marginRight: '4vw',
+            }}
+          >
+            Cancelar
+          </Button>
+        </Form>
+        <br />
       </div>
-    </form>
+    </div>
   );
 };
 

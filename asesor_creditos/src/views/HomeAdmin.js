@@ -3,7 +3,6 @@ import '../styles/CreditosAdmin.css';
 import CreditosAdmin from './CreditosAdmin';
 import Header from '../components/Header';
 import Carousel from '../components/slickCarousel';
-import MenuIcon from '../icons/menuIcon';
 import UserIcon from '../icons/user';
 
 function HomeAdmin() {

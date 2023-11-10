@@ -15,7 +15,6 @@ function App() {
       <Routes>
         <Route path="/" element={<Simulator />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/credPrueba" element={<CreditosAdmin />} />
         <Route path="/homeadmin" element={<HomeAdmin />} />
         <Route path="/creditform" element={<FormularioCredito />} />
         <Route path="/profile" element={<Profile />} />
