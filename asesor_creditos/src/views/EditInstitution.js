@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import ArrowLeftLine from '../icons/arrowLeftLine';
-import EditIcon from '../icons/editIcon';
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import UpdateCancel from '../components/Update&Cancel';
 
@@ -46,13 +43,13 @@ function EditInstitution() {
       >
         Información de la institución
       </text>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div style={{ display: 'flex', alignItems: 'center', marginTop: '20px' }}>
         <text
           style={{
             fontSize: '20px',
             fontWeight: 'bold',
             display: 'flex',
-            margin: '20px 30px 0px 122px',
+            margin: '0px 30px 0px 122px',
           }}
         >
           Nombre de la institución:
@@ -139,6 +136,9 @@ function EditInstitution() {
           <UpdateCancel action={handleClose} cancel={handleClose} />
         </Modal.Footer>
       </Modal>
+      <div style={{ margin: '50px 0px 0px 122px' }}>
+        <UpdateCancel />
+      </div>
     </div>
   );
 }
