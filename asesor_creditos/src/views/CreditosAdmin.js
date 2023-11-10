@@ -3,6 +3,7 @@ import CircleCancelIcon from '../components/CircleCancelIcon';
 import CircleEditIcon from '../components/CircleEditIcon';
 import '../styles/CreditosAdmin.css';
 import CoverNewIcon from '../components/CoverNewIcon';
+import { useNavigate } from 'react-router-dom';
 
 const Credito = (props) => {
   return (
@@ -18,6 +19,7 @@ const Credito = (props) => {
 };
 
 function CreditosAdmin() {
+  const navigate = useNavigate();
   const [creditos, setCreditos] = useState([
     {
       id: 1,
@@ -80,6 +82,10 @@ function CreditosAdmin() {
     //console.log(`Se hizo clic en ${props.name}`);
   };
 
+  const handleNuevoCredito = () => {
+    navigate('/creditform');
+  };
+
   return (
     <div>
       <div className="row">
@@ -93,22 +99,23 @@ function CreditosAdmin() {
         <CoverNewIcon width={45} height={30} fill="#000" />
       </div>
       <hr />
-      <div className='newButton'>
-        <CoverNewIcon width={45} height={30} fill="#000" />
-      </div>
-      <div className="cells">
-        {creditos.map((credito) => {
-          return (
-            <Credito
-              key={credito.id}
-              name={credito.name}
-              interes={credito.interes}
-            />
-          );
-        })}
+      <div className="newButton">
+        <div className="newButton" onClick={handleNuevoCredito}>
+          <CoverNewIcon width={45} height={30} fill="#000" />
+        </div>
+        <div className="cells">
+          {creditos.map((credito) => {
+            return (
+              <Credito
+                key={credito.id}
+                name={credito.name}
+                interes={credito.interes}
+              />
+            );
+          })}
+        </div>
       </div>
     </div>
   );
 }
-
 export default CreditosAdmin;
