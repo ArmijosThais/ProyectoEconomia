@@ -178,9 +178,12 @@ function Simulator() {
             >
               Monto:
             </text>
-            <InputGroup style={{ width: '300px' }}>
-              <InputGroup.Text id="basic-addon1">$</InputGroup.Text>
+            <InputGroup style={{ width: '300px', height: '50px' }}>
+              <InputGroup.Text id="basic-addon1" style={{ height: '50px' }}>
+                $
+              </InputGroup.Text>
               <Form.Control
+                style={{ height: '50px' }}
                 type="number"
                 step="0.01"
                 placeholder="00.00"
@@ -200,18 +203,22 @@ function Simulator() {
               style={{
                 fontSize: '18px',
                 marginRight: '53px',
+                marginBottom: '20px',
               }}
             >
               Meses plazo:
             </text>
             <InputGroup style={{ width: '300px' }}>
               <Form.Control
+                style={{ height: '50px' }}
                 type="number"
                 step="1"
                 placeholder="0"
                 aria-label="integer-input"
               />
-              <InputGroup.Text id="basic-addon2">meses</InputGroup.Text>
+              <InputGroup.Text id="basic-addon2" style={{ height: '50px' }}>
+                meses
+              </InputGroup.Text>
             </InputGroup>
           </div>
           <button
