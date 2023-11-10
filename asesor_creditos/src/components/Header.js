@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import MenuIcon from '../icons/menuIcon';
 
-function Header() {
+function Header({ iconSide, button }) {
   const icon =
     'https://upload.wikimedia.org/wikipedia/commons/c/cc/Banco-Pichincha.png';
   const institutionName = 'Banco Pichincha';
@@ -47,7 +46,7 @@ function Header() {
         margin: '12px 50px',
       }}
     >
-      <MenuIcon />
+      {iconSide}
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <img
           src={icon}
@@ -78,7 +77,7 @@ function Header() {
         onMouseEnter={handleHover}
         onMouseLeave={handleLeave}
       >
-        Acceder
+        {button}
       </Link>
     </div>
   );
