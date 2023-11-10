@@ -1,20 +1,18 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './components/Header';
-import Login from './views/Login.js';
-import CreditosAdmin from './views/CreditosAdmin.js';
+import CreditosAdmin from './views/CreditosAdmin';
+import Login from './views/Login';
+import Simulator from './views/Simulator';
 
 function App() {
   return (
-    <div>
-      <Router>
-        <Header />
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/credPrueba" element={<CreditosAdmin />} />
-        </Routes>
-      </Router>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Simulator />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/credPrueba" element={<CreditosAdmin />} />
+      </Routes>
+    </Router>
   );
 }
 
