@@ -45,11 +45,7 @@
 
 .acciones {
   display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: flex-end;
-  width: 80%;
-  margin-left: 10%;
+  justify-content: space-between;
 }
 
 .newButton{
