@@ -8,12 +8,10 @@ import Profile from './views/Profile';
 import Simulator from './views/Simulator';
 import HomeAdmin from './views/HomeAdmin';
 import FormularioCredito from './views/FormularioCredito';
-import Header from './components/Header';
 
 function App() {
   return (
     <Router>
-      <Header/>
       <Routes>
         <Route path="/" element={<Simulator />} />
         <Route path="/login" element={<Login />} />
