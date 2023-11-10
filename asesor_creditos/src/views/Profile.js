@@ -167,7 +167,6 @@ function Profile() {
           style={{
             fontSize: '20px',
             display: 'flex',
-            marginTop: '20px',
             color: '#666666',
           }}
         >
