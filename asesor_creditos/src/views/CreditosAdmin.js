@@ -1,22 +1,48 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CircleCancelIcon from '../components/CircleCancelIcon';
 import CircleEditIcon from '../components/CircleEditIcon';
 import '../styles/CreditosAdmin.css';
 import CoverNewIcon from '../components/CoverNewIcon';
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
+import { obtenerCategorias } from '../services/apiCategorias';
+import { eliminarSubcategoria, obtenerSubategorias } from '../services/apiSubcategorias';
 
 const Credito = (props) => {
+  const navigate = useNavigate();
+  const creditoData = props.creditoData;
+
+  const handleEditCredito = () => {
+    navigate('/creditform', { state: { creditoData } });
+  };
+
+  const handleDeleteCredito = async () => {
+    const confirmacion = window.confirm('¿Estás seguro de que deseas eliminar esta subcategoría?');
+
+    if (confirmacion) {
+      try {
+        await eliminarSubcategoria(props.id);
+        window.location.reload();
+      } catch (error) {
+        console.error('Error al eliminar la subcategoría:', error);
+      }
+    }
+  };
+
   return (
     <div className="card">
       <h4>{props.name}</h4>
       <p className="text-muted">Tasa de Interés: {props.interes}%</p>
       <div className="acciones">
         <>
-          <Button variant="light" style={{ marginLeft: '10px' }}>
+          <Button
+            variant="light"
+            style={{ marginLeft: '10px' }}
+            onClick={() => handleDeleteCredito()}
+          >
             <CircleCancelIcon width={30} height={24} fill="#000" />
           </Button>
-          <Button variant="light">
+          <Button variant="light" onClick={() => handleEditCredito()}>
             <CircleEditIcon width={30} height={24} fill="#000" />
           </Button>
         </>
@@ -27,70 +53,25 @@ const Credito = (props) => {
 
 function CreditosAdmin() {
   const navigate = useNavigate();
-  const [creditos, setCreditos] = useState([
-    {
-      id: 1,
-      name: 'Crédito Multipropósito',
-      interes: '15',
-    },
-    {
-      id: 2,
-      name: 'Crédito línea abierta',
-      interes: '10',
-    },
-    {
-      id: 3,
-      name: 'Crédito Económico',
-      interes: '12',
-    },
-    {
-      id: 4,
-      name: 'Crédito Económico',
-      interes: '12',
-    },
-    {
-      id: 5,
-      name: 'Crédito Económico',
-      interes: '12',
-    },
-    {
-      id: 6,
-      name: 'Crédito Económico',
-      interes: '12',
-    },
-  ]);
+  const [creditos, setCreditos] = useState([]);
+  const [tiposCredito, setTiposCredito] = useState([]);
+  const [idSelectedTipo, setIdSelectedTipo] = useState(null);
 
-  const [tiposCredito, setTiposCredito] = useState([
-    {
-      id: 1,
-      name: 'Todos',
-    },
-    {
-      id: 2,
-      name: 'Hipotecarios',
-    },
-    {
-      id: 3,
-      name: 'Consumo',
-    },
-    {
-      id: 3,
-      name: 'Servicio',
-    },
-    {
-      id: 3,
-      name: 'Educación',
-    },
-  ]);
+  useEffect(() => {
+    obtenerCategorias().then((datos) => {
+      setTiposCredito(datos);
+    });
+  }, []);
 
-  const handleSelectTipo = () => {
-    // Realiza alguna acción cuando se hace clic en el componente
-    // Puedes definir lo que desees que suceda aquí
-    //console.log(`Se hizo clic en ${props.name}`);
+  const handleSelectTipo = (tipo) => {
+    setIdSelectedTipo(tipo._id);
+    obtenerSubategorias(tipo._id).then((datos) => {
+      setCreditos(datos);
+    });
   };
 
   const handleNuevoCredito = () => {
-    navigate('/creditform');
+    navigate('/creditform', { state: { idSelectedTipo } });
   };
 
   return (
@@ -106,10 +87,12 @@ function CreditosAdmin() {
           {tiposCredito.map((tipo) => {
             return (
               <Button
+                key={tipo._id}
                 variant="outline-secondary"
                 style={{ marginLeft: '10px' }}
+                onClick={() => handleSelectTipo(tipo)}
               >
-                {tipo.name}
+                {tipo.nombreCategoria}
               </Button>
             );
           })}
@@ -119,21 +102,31 @@ function CreditosAdmin() {
         </>
       </div>
       <hr />
-      <div className="newButton" onClick={handleNuevoCredito}>
-        <Button variant="outline-light">
-          <CoverNewIcon width={45} height={30} fill="#000" />
-        </Button>
+      <div className="newButton">
+        {idSelectedTipo !== null && (
+          <Button variant="outline-light" onClick={() => handleNuevoCredito()}>
+            <CoverNewIcon width={45} height={30} fill="#000" />
+          </Button>
+        )}
       </div>
       <div className="cells">
-        {creditos.map((credito) => {
-          return (
+        {creditos && Array.isArray(creditos) && creditos.length > 0 ? (
+          creditos.map((credito) => (
             <Credito
-              key={credito.id}
-              name={credito.name}
-              interes={credito.interes}
+              key={credito._id}
+              id={credito._id}
+              name={credito.nombreSubcategoria}
+              interes={credito.tasaInteres}
+              creditoData={credito}
             />
-          );
-        })}
+          ))
+        ) : (
+          <p>
+            {creditos && creditos.mensaje
+              ? 'No hay datos de créditos disponibles.'
+              : 'No hay datos de créditos disponibles.'}
+          </p>
+        )}
       </div>
     </div>
   );

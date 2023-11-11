@@ -1,30 +1,26 @@
 import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import ArrowLeftLine from '../icons/arrowLeftLine';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/esm/Button';
-//hola
+import { actualizarSubcategoria, agregarSubcategoria } from '../services/apiSubcategorias';
+
 const FormularioCredito = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const idSelectedTipo = location.state.idSelectedTipo;
+  const creditoData = location.state.creditoData;
+
   const [formData, setFormData] = useState({
-    requisitos: '',
-    tasaDeInteres: '',
-    plazos: '',
-    montoMaximo: '',
-    cobrosMinimos: '',
+    nombreSubcategoria: creditoData ? creditoData.nombreSubcategoria : '',
+    tasaInteres: creditoData ? creditoData.tasaInteres : '',
+    plazoMaximo: creditoData ? creditoData.plazoMaximo : '',
+    montoMinimo: creditoData ? creditoData.montoMinimo : '',
+    montoMaximo: creditoData ? creditoData.montoMaximo : '',
+    idCategoria: creditoData ? creditoData.idCategoria : idSelectedTipo,
   });
-  const [cobrosIndirectos, setCobrosIndirectos] = useState([
-    {
-      id: 1,
-      name: 'Seguro',
-      value: '360',
-    },
-    {
-      id: 2,
-      name: 'Caridad',
-      value: '152',
-    },
-  ]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -36,8 +32,25 @@ const FormularioCredito = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Aquí puedes manejar la lógica de envío del formulario
-    console.log(formData);
+    if (creditoData) {
+      actualizarSubcategoria(creditoData._id ,formData).then((response) => {
+        console.log(response);
+        if (response) {
+          navigate('/homeadmin');
+        }
+      });
+    } else {
+      agregarSubcategoria(formData).then((response) => {
+        console.log(response);
+        if (response) {
+          navigate('/homeadmin');
+        }
+      });
+    }
+  };
+
+  const handleback = () => {
+    console.log(creditoData.nombreSubcategoria);
   };
 
   return (
@@ -47,48 +60,61 @@ const FormularioCredito = () => {
         <h3>Datos del Crédito</h3>
         <br />
         <Form onSubmit={handleSubmit}>
-          <h5>Requisitos</h5>
-          <Form.Group className="mb-3">
+          <h5>Nombre</h5>
+          <InputGroup className="mb-3">
             <Form.Control
-              as="textarea"
-              aria-label="With textarea"
+              aria-label="Last name"
+              name="nombreSubcategoria"
+              value={formData.nombreSubcategoria}
               onChange={handleInputChange}
+              required
             />
-          </Form.Group>
+          </InputGroup>
           <h5>Interés</h5>
           <InputGroup className="mb-3">
-            <Form.Control aria-label="Amount (to the nearest dollar)" />
+            <Form.Control
+              aria-label="Amount (to the nearest dollar)"
+              name="tasaInteres"
+              value={formData.tasaInteres}
+              onChange={handleInputChange}
+              required
+            />
             <InputGroup.Text>%</InputGroup.Text>
           </InputGroup>
           <h5>Plazos</h5>
           <InputGroup className="mb-3">
-            <Form.Control aria-label="Amount (to the nearest dollar)" />
+            <Form.Control
+              aria-label="Amount (to the nearest dollar)"
+              name="plazoMaximo"
+              value={formData.plazoMaximo}
+              onChange={handleInputChange}
+              required
+            />
             <InputGroup.Text>Meses</InputGroup.Text>
           </InputGroup>
           <h5>Montos</h5>
           <p>Monto Máximo</p>
           <InputGroup className="mb-3">
             <InputGroup.Text>$</InputGroup.Text>
-            <Form.Control aria-label="Amount (to the nearest dollar)" />
+            <Form.Control
+              aria-label="Amount (to the nearest dollar)"
+              name="montoMaximo"
+              value={formData.montoMaximo}
+              onChange={handleInputChange}
+              required
+            />
             <InputGroup.Text>.00</InputGroup.Text>
           </InputGroup>
           <p>Monto Mínimo</p>
           <InputGroup className="mb-3">
             <InputGroup.Text>$</InputGroup.Text>
-            <Form.Control aria-label="Amount (to the nearest dollar)" />
-            <InputGroup.Text>.00</InputGroup.Text>
-          </InputGroup>
-          <h5>Cobros Indirectos</h5>
-          <p>Seguros</p>
-          <InputGroup className="mb-3">
-            <InputGroup.Text>$</InputGroup.Text>
-            <Form.Control aria-label="Amount (to the nearest dollar)" />
-            <InputGroup.Text>.00</InputGroup.Text>
-          </InputGroup>
-          <p>Donaciones a Fundaciones</p>
-          <InputGroup className="mb-3">
-            <InputGroup.Text>$</InputGroup.Text>
-            <Form.Control aria-label="Amount (to the nearest dollar)" />
+            <Form.Control
+              aria-label="Amount (to the nearest dollar)"
+              name="montoMinimo"
+              value={formData.montoMinimo}
+              onChange={handleInputChange}
+              required
+            />
             <InputGroup.Text>.00</InputGroup.Text>
           </InputGroup>
           <Button
@@ -110,6 +136,7 @@ const FormularioCredito = () => {
               marginTop: '20px',
               marginRight: '4vw',
             }}
+            onClick={() => handleback()}
           >
             Cancelar
           </Button>
