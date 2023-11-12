@@ -1,16 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import ArrowLeftLine from '../icons/arrowLeftLine';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import UpdateCancel from '../components/Update&Cancel';
+import {
+  obtenerInstitucion,
+  actualizarInstitucion,
+} from '../services/apiInstitucion';
 
 function EditInstitution() {
-  const institutionName = 'Banco Pichincha';
-  const icon =
-    'https://upload.wikimedia.org/wikipedia/commons/c/cc/Banco-Pichincha.png';
+  const [institutionName, setInstitutionName] = useState('');
+  const [icon, setIcon] = useState('');
+  const [color, setColor] = useState('');
+  const [id, setId] = useState('');
+  //const asterisks = '*'.repeat(password.length);
 
-  const [color, setColor] = useState('#ffdf00'); // Valor inicial negro
+  useEffect(() => {
+    obtenerInstitucion().then((datos) => {
+      console.log(datos);
+      if (datos.institucion.length > 0) {
+        setInstitutionName(datos.institucion[0].nombreInstitucion);
+        setIcon(datos.institucion[0].logo);
+        setColor(datos.institucion[0].color);
+        setId(datos.institucion[0]._id);
+      } else {
+        console.error('No se encontraron datos de usuario.');
+      }
+    });
+  }, []);
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -26,6 +44,33 @@ function EditInstitution() {
       // Puedes manejar la invalidación de alguna manera, como mostrar un mensaje de error
       console.log('Ingrese un color hexadecimal válido');
     }
+  };
+
+  const handleUpdate = async () => {
+    console.log(institutionName, icon, color, id);
+    const data = {
+      nombreInstitucion: institutionName,
+      logo: icon,
+      color: color,
+    };
+    try {
+      await actualizarInstitucion(id, data);
+      handleReturn();
+    } catch (error) {
+      console.error('Error al actualizar la info:', error);
+    }
+  };
+
+  const handleReturn = () => {
+    window.history.back();
+  };
+
+  const handleLogo = (event) => {
+    setIcon(event.target.value);
+  };
+
+  const handleName = (event) => {
+    setInstitutionName(event.target.value);
   };
 
   return (
@@ -59,6 +104,7 @@ function EditInstitution() {
           id="inputPassword5"
           aria-describedby="passwordHelpBlock"
           defaultValue={institutionName}
+          onChange={handleName}
           style={{
             fontSize: '16px',
             display: 'flex',
@@ -126,6 +172,8 @@ function EditInstitution() {
             placeholder="Url de la imagen"
             id="inputPassword5"
             aria-describedby="passwordHelpBlock"
+            value={icon}
+            onChange={handleLogo}
             style={{
               fontSize: '16px',
               width: '465px',
@@ -137,7 +185,7 @@ function EditInstitution() {
         </Modal.Footer>
       </Modal>
       <div style={{ margin: '50px 0px 0px 122px' }}>
-        <UpdateCancel />
+        <UpdateCancel action={handleUpdate} cancel={handleReturn} />
       </div>
     </div>
   );
