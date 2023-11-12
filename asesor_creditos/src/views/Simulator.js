@@ -99,7 +99,12 @@ function Simulator() {
     });
   };
   const handleSelectCredit = (eventKey, event) => {
-    setSelectedCredit(event.target.text);
+    setSelectedCredit(
+      optionsCredit.find(
+        (option) => option.nombreSubcategoria === event.target.text
+      )
+    );
+    console.log(selectedCredit?.montoMinimo);
   };
   const handleInputChange = (event, type) => {
     const value = event.target.value;
@@ -156,7 +161,7 @@ function Simulator() {
     }
 
     // Cálculos para amortización francesa
-    const rateFrancesa = 0.14; // Tasa de interés anual (ejemplo)
+    const rateFrancesa = selectedCredit.tasaInteres; // Tasa de interés anual (ejemplo)
     const monthlyRateFrancesa = rateFrancesa / 12 / 100; // Tasa de interés mensual
     const monthlyPaymentFrancesa =
       (amount * monthlyRateFrancesa) /
@@ -299,7 +304,11 @@ function Simulator() {
             <NavDropdown
               onSelect={handleSelectCredit}
               id="nav-dropdown-dark-example"
-              title={selectedCredit ? selectedCredit : 'Seleccione crédito'}
+              title={
+                selectedCredit && selectedCredit.nombreSubcategoria
+                  ? selectedCredit.nombreSubcategoria
+                  : 'Seleccione crédito'
+              }
               menuVariant="light"
               style={{
                 fontSize: '18px',
@@ -355,6 +364,8 @@ function Simulator() {
                 placeholder="00.00"
                 aria-label="decimal-input"
                 onChange={(event) => handleInputChange(event, 'amount')}
+                min={selectedCredit?.montoMinimo}
+                max={selectedCredit?.montoMaximo}
               />
             </InputGroup>
           </div>
@@ -383,6 +394,7 @@ function Simulator() {
                 placeholder="0"
                 aria-label="integer-input"
                 onChange={(event) => handleInputChange(event, 'months')}
+                max={selectedCredit?.plazoMaximo}
               />
               <InputGroup.Text id="basic-addon2" style={{ height: '50px' }}>
                 meses
