@@ -5,18 +5,34 @@ import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/esm/FloatingLabel';
 import Header from '../components/Header';
 import MenuIcon from '../icons/menuIcon';
+import { iniciarSesion } from '../services/apiUsuario';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [correo, setCorreo] = useState('');
+  const [clave, setClave] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    if (email === 'admin@gmail.com' && password === 'admin') {
-      navigate('/homeadmin');
-    } else {
-      console.log('Correo electrónico o contraseña incorrectos');
+    try {
+      iniciarSesion({ correo, clave }).then((resultado) => {
+        if (resultado && resultado.encontrado) {
+          navigate('/homeadmin');
+        } else {
+          toast.error('Usuario o contraseña incorrectos', {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+        }
+      });
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error.message);
     }
   };
 
@@ -99,18 +115,18 @@ const Login = () => {
                   className="mb-3"
                 >
                   <Form.Control
-                    type="email"
+                    type="correo"
                     placeholder="name@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    value={correo}
+                    onChange={(e) => setCorreo(e.target.value)}
                   />
                 </FloatingLabel>
                 <FloatingLabel controlId="floatingPassword" label="Contraseña">
                   <Form.Control
                     type="password"
                     placeholder="Contraseña"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    value={clave}
+                    onChange={(e) => setClave(e.target.value)}
                   />
                 </FloatingLabel>
                 <Button
@@ -122,7 +138,7 @@ const Login = () => {
                     marginLeft: '5vw',
                   }}
                 >
-                  Submit
+                  Ingresar
                 </Button>
               </Form>
             </div>
