@@ -10,48 +10,13 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import MenuIcon from '../icons/menuIcon';
 
 function Simulator() {
-  const nodes = [
+  var nodes = [
     {
       id: '0',
-      indirectChargesFee: '$500',
-      interest: '$400',
-      capital: '$300',
-      balance: '$200',
-    },
-    {
-      id: '1',
-      indirectChargesFee: '$500',
-      interest: '$400',
-      capital: '$300',
-      balance: '$200',
-    },
-    {
-      id: '2',
-      indirectChargesFee: '$500',
-      interest: '$400',
-      capital: '$300',
-      balance: '$200',
-    },
-    {
-      id: '3',
-      indirectChargesFee: '$500',
-      interest: '$400',
-      capital: '$300',
-      balance: '$200',
-    },
-    {
-      id: '4',
-      indirectChargesFee: '$500',
-      interest: '$400',
-      capital: '$300',
-      balance: '$200',
-    },
-    {
-      id: '5',
-      indirectChargesFee: '$500',
-      interest: '$400',
-      capital: '$300',
-      balance: '$200',
+      indirectChargesFee: '0',
+      interest: '0.14',
+      capital: '200',
+      balance: '200',
     },
   ];
 
@@ -66,11 +31,44 @@ function Simulator() {
     { label: 'SALDO', renderCell: (item) => item.balance },
   ];
 
-  const data = { nodes };
   const theme = useTheme(getTheme());
 
-  const [selectedOption, setSelectedOption] = useState(null);
-  const options = ['Option 1', 'Option 2', 'Option 3'];
+  const [selectedType, setSelectedType] = useState(null);
+  const [selectedCredit, setSelectedCredit] = useState(null);
+  const [amounti, setAmount] = useState('');
+  const [monthsi, setMonths] = useState('');
+  const [tables, setTables] = useState({
+    francesa: [
+      {
+        id: '0',
+        indirectChargesFee: '0',
+        interest: '0.14',
+        capital: '200',
+        balance: '200',
+      },
+    ],
+    alemana: [
+      {
+        id: '0',
+        indirectChargesFee: '0',
+        interest: '0.14',
+        capital: '200',
+        balance: '200',
+      },
+    ],
+  });
+  //const [nodes, setNodes] = useState({});
+  const [alemana, setAlemana] = useState({
+    id: '0',
+    indirectChargesFee: '0',
+    interest: '0.14',
+    capital: '200',
+    balance: '200',
+  });
+  const [data, setData] = useState({ nodes });
+  //var data = { nodes };
+  const optionsType = ['Consumo', 'Hipotecario', 'Option 3'];
+  const optionsCredit = ['Option 1', 'Option 2', 'Option 3'];
   const color = '#ffdf00';
   const [hovered, setHovered] = useState(false);
   const backgroundColor = hovered ? lightenColor(color, 0.3) : color;
@@ -103,8 +101,88 @@ function Simulator() {
     return lightenedHex;
   }
 
-  const handleSelect = (eventKey, event) => {
-    setSelectedOption(event.target.text);
+  const generateTables = () => {
+    // Convertir el monto y los meses a números
+    const amount = parseFloat(amounti);
+    const months = parseInt(monthsi);
+
+    if (isNaN(amount) || isNaN(months) || amount <= 0 || months <= 0) {
+      console.error('Ingrese valores válidos para monto y meses.');
+      return;
+    }
+
+    // Cálculos para amortización francesa
+    const rateFrancesa = 0.14; // Tasa de interés anual (ejemplo)
+    const monthlyRateFrancesa = rateFrancesa / 12 / 100; // Tasa de interés mensual
+    const monthlyPaymentFrancesa =
+      (amount * monthlyRateFrancesa) /
+      (1 - Math.pow(1 + monthlyRateFrancesa, -months));
+
+    // Crear la tabla de amortización francesa
+    const nodes = [];
+    let remainingBalanceFrancesa = amount;
+
+    for (let i = 1; i <= months; i++) {
+      const interestFrancesa = remainingBalanceFrancesa * monthlyRateFrancesa;
+      const principalFrancesa = monthlyPaymentFrancesa - interestFrancesa;
+
+      nodes.push({
+        id: i.toString(),
+        indirectChargesFee: monthlyPaymentFrancesa.toFixed(2).toString(),
+        interest: interestFrancesa.toFixed(2).toString(),
+        capital: principalFrancesa.toFixed(2).toString(),
+        balance: (remainingBalanceFrancesa -= principalFrancesa)
+          .toFixed(2)
+          .toString(),
+      });
+    }
+
+    setData({ nodes });
+
+    // Cálculos para amortización alemana
+    const principalAlemana = amount / months;
+
+    // Crear la tabla de amortización alemana
+    const tablaAlemana = [];
+    let remainingBalanceAlemana = amount;
+
+    for (let i = 1; i <= months; i++) {
+      const interestAlemana = remainingBalanceAlemana * monthlyRateFrancesa;
+      const cuotaAlemana = principalAlemana + interestAlemana;
+
+      tablaAlemana.push({
+        id: i.toString(),
+        indirectChargesFee: cuotaAlemana.toFixed(2).toString(),
+        interest: interestAlemana.toFixed(2).toString(),
+        capital: principalAlemana.toFixed(2).toString(),
+        saldoRestante: (remainingBalanceAlemana -= principalAlemana)
+          .toFixed(2)
+          .toString(),
+      });
+    }
+
+    // Actualizar el estado con las tablas generadas
+    //setTables({ francesa: tablaFrancesa, alemana: tablaAlemana });
+    //nodes.push(tablaFrancesa);
+    //data = { nodes };
+    //setFrancesa({tablaFrancesa});
+    //setAlemana({tablaAlemana});
+  };
+
+  const handleSelectType = (eventKey, event) => {
+    setSelectedType(event.target.text);
+  };
+  const handleSelectCredit = (eventKey, event) => {
+    setSelectedCredit(event.target.text);
+  };
+  const handleInputChange = (event, type) => {
+    const value = event.target.value;
+
+    if (type === 'amount') {
+      setAmount(value);
+    } else if (type === 'months') {
+      setMonths(value);
+    }
   };
 
   return (
@@ -145,9 +223,9 @@ function Simulator() {
               Tipo de crédito:
             </text>
             <NavDropdown
-              onSelect={handleSelect}
+              onSelect={handleSelectType}
               id="nav-dropdown-dark-example"
-              title={selectedOption ? selectedOption : 'Seleccione crédito'}
+              title={selectedType ? selectedType : 'Seleccione crédito'}
               menuVariant="light"
               style={{
                 fontSize: '18px',
@@ -155,7 +233,35 @@ function Simulator() {
                 color: '#666666',
               }}
             >
-              {options.map((option, index) => (
+              {optionsType.map((option, index) => (
+                <NavDropdown.Item key={index} eventKey={`option-${index}`}>
+                  {option}
+                </NavDropdown.Item>
+              ))}
+            </NavDropdown>
+          </div>
+          <div style={{ display: 'flex', marginTop: '25px' }}>
+            <text
+              style={{
+                fontSize: '18px',
+                display: 'flex',
+                marginRight: '30px',
+              }}
+            >
+              Crédito:
+            </text>
+            <NavDropdown
+              onSelect={handleSelectCredit}
+              id="nav-dropdown-dark-example"
+              title={selectedCredit ? selectedCredit : 'Seleccione crédito'}
+              menuVariant="light"
+              style={{
+                fontSize: '18px',
+                display: 'flex',
+                color: '#666666',
+              }}
+            >
+              {optionsCredit.map((option, index) => (
                 <NavDropdown.Item key={index} eventKey={`option-${index}`}>
                   {option}
                 </NavDropdown.Item>
@@ -188,6 +294,7 @@ function Simulator() {
                 step="0.01"
                 placeholder="00.00"
                 aria-label="decimal-input"
+                onChange={(event) => handleInputChange(event, 'amount')}
               />
             </InputGroup>
           </div>
@@ -215,6 +322,7 @@ function Simulator() {
                 step="1"
                 placeholder="0"
                 aria-label="integer-input"
+                onChange={(event) => handleInputChange(event, 'months')}
               />
               <InputGroup.Text id="basic-addon2" style={{ height: '50px' }}>
                 meses
@@ -242,52 +350,58 @@ function Simulator() {
             }}
             onMouseEnter={handleHover}
             onMouseLeave={handleLeave}
+            onClick={generateTables}
           >
             Generar
           </button>
         </div>
       </div>
       <div style={{ display: 'flex' }}>
-        <div
-          style={{
-            width: '35%',
-            padding: '10px',
-            margin: 'auto',
-          }}
-        >
-          <text
+        {tables.francesa.length > 0 && (
+          <div
             style={{
-              fontWeight: 'bold',
-              fontSize: '20px',
-              display: 'flex',
-              justifyContent: 'center',
-              margin: '50px 0 20px 0',
+              width: '35%',
+              padding: '10px',
+              margin: 'auto',
             }}
           >
-            Amortización francesa
-          </text>
-          <CompactTable columns={COLUMNS} data={data} theme={theme} />
-        </div>
-        <div
-          style={{
-            width: '35%',
-            padding: '10px',
-            margin: 'auto',
-          }}
-        >
-          <text
+            <text
+              style={{
+                fontWeight: 'bold',
+                fontSize: '20px',
+                display: 'flex',
+                justifyContent: 'center',
+                margin: '50px 0 20px 0',
+              }}
+            >
+              Amortización francesa
+            </text>
+            <CompactTable columns={COLUMNS} data={data} theme={theme} />
+          </div>
+        )}
+
+        {tables.alemana.length > 0 && (
+          <div
             style={{
-              fontWeight: 'bold',
-              fontSize: '20px',
-              display: 'flex',
-              justifyContent: 'center',
-              margin: '50px 0 20px 0',
+              width: '35%',
+              padding: '10px',
+              margin: 'auto',
             }}
           >
-            Amortización alemana
-          </text>
-          <CompactTable columns={COLUMNS} data={data} theme={theme} />
-        </div>
+            <text
+              style={{
+                fontWeight: 'bold',
+                fontSize: '20px',
+                display: 'flex',
+                justifyContent: 'center',
+                margin: '50px 0 20px 0',
+              }}
+            >
+              Amortización alemana
+            </text>
+            <CompactTable columns={COLUMNS} data={data} theme={theme} />
+          </div>
+        )}
       </div>
     </div>
   );
