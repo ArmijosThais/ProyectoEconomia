@@ -6,7 +6,7 @@ import FloatingLabel from 'react-bootstrap/esm/FloatingLabel';
 import Header from '../components/Header';
 import MenuIcon from '../icons/menuIcon';
 import { iniciarSesion } from '../services/apiUsuario';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {

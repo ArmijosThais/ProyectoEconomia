@@ -7,7 +7,7 @@ import Profile from './views/Profile';
 import Simulator from './views/Simulator';
 import HomeAdmin from './views/HomeAdmin';
 import FormularioCredito from './views/FormularioCredito';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {

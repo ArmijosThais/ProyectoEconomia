@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Carousel from '../components/slickCarousel';
 import { CompactTable } from '@table-library/react-table-library/compact';
@@ -8,6 +8,9 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import MenuIcon from '../icons/menuIcon';
+import { obtenerCategorias } from '../services/apiCategorias';
+import { obtenerSubategorias } from '../services/apiSubcategorias';
+import Spinner from 'react-bootstrap/Spinner';
 
 function Simulator() {
   var nodes = [
@@ -32,9 +35,13 @@ function Simulator() {
   ];
 
   const theme = useTheme(getTheme());
+  const [isLoading, setIsLoading] = useState(true);
 
+  const [optionsType, setOptionsType] = useState([]);
+  const [optionsCredit, setOptionsCredit] = useState([]);
   const [selectedType, setSelectedType] = useState(null);
   const [selectedCredit, setSelectedCredit] = useState(null);
+
   const [amounti, setAmount] = useState('');
   const [monthsi, setMonths] = useState('');
   const [tables, setTables] = useState({
@@ -67,8 +74,6 @@ function Simulator() {
   });
   const [data, setData] = useState({ nodes });
   //var data = { nodes };
-  const optionsType = ['Consumo', 'Hipotecario', 'Option 3'];
-  const optionsCredit = ['Option 1', 'Option 2', 'Option 3'];
   const color = '#ffdf00';
   const [hovered, setHovered] = useState(false);
   const backgroundColor = hovered ? lightenColor(color, 0.3) : color;
@@ -80,6 +85,45 @@ function Simulator() {
   const handleLeave = () => {
     setHovered(false);
   };
+
+  const handleSelectType = async (eventKey, event) => {
+    setSelectedType(
+      optionsType.find((option) => option.nombreCategoria === event.target.text)
+    );
+    console.log(selectedType);
+    obtenerSubategorias(
+      optionsType.find((option) => option.nombreCategoria === event.target.text)
+        ._id
+    ).then((datos) => {
+      setOptionsCredit(datos);
+    });
+  };
+  const handleSelectCredit = (eventKey, event) => {
+    setSelectedCredit(event.target.text);
+  };
+  const handleInputChange = (event, type) => {
+    const value = event.target.value;
+
+    if (type === 'amount') {
+      setAmount(value);
+    } else if (type === 'months') {
+      setMonths(value);
+    }
+  };
+
+  useEffect(() => {
+    obtenerCategorias().then((datos) => {
+      setOptionsType(datos);
+    });
+  }, []);
+
+  useEffect(() => {
+    // Simula la carga de datos, puedes ajustar esto según tu lógica real
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+  }, [selectedType]);
 
   function lightenColor(color, factor) {
     const hexToRgb = (hex) =>
@@ -169,22 +213,6 @@ function Simulator() {
     //setAlemana({tablaAlemana});
   };
 
-  const handleSelectType = (eventKey, event) => {
-    setSelectedType(event.target.text);
-  };
-  const handleSelectCredit = (eventKey, event) => {
-    setSelectedCredit(event.target.text);
-  };
-  const handleInputChange = (event, type) => {
-    const value = event.target.value;
-
-    if (type === 'amount') {
-      setAmount(value);
-    } else if (type === 'months') {
-      setMonths(value);
-    }
-  };
-
   return (
     <div>
       <Header
@@ -225,7 +253,11 @@ function Simulator() {
             <NavDropdown
               onSelect={handleSelectType}
               id="nav-dropdown-dark-example"
-              title={selectedType ? selectedType : 'Seleccione crédito'}
+              title={
+                selectedType && selectedType.nombreCategoria
+                  ? selectedType.nombreCategoria
+                  : 'Seleccione tipo crédito'
+              }
               menuVariant="light"
               style={{
                 fontSize: '18px',
@@ -233,11 +265,25 @@ function Simulator() {
                 color: '#666666',
               }}
             >
-              {optionsType.map((option, index) => (
-                <NavDropdown.Item key={index} eventKey={`option-${index}`}>
-                  {option}
-                </NavDropdown.Item>
-              ))}
+              {isLoading ? (
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Spinner animation="border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </Spinner>
+                </div>
+              ) : (
+                optionsType.map((option, index) => (
+                  <NavDropdown.Item key={index} eventKey={`option-${index}`}>
+                    {option.nombreCategoria}
+                  </NavDropdown.Item>
+                ))
+              )}
             </NavDropdown>
           </div>
           <div style={{ display: 'flex', marginTop: '25px' }}>
@@ -261,11 +307,25 @@ function Simulator() {
                 color: '#666666',
               }}
             >
-              {optionsCredit.map((option, index) => (
-                <NavDropdown.Item key={index} eventKey={`option-${index}`}>
-                  {option}
-                </NavDropdown.Item>
-              ))}
+              {isLoading ? (
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Spinner animation="border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </Spinner>
+                </div>
+              ) : (
+                optionsCredit.map((option, index) => (
+                  <NavDropdown.Item key={index} eventKey={`option-${index}`}>
+                    {option.nombreSubcategoria}
+                  </NavDropdown.Item>
+                ))
+              )}
             </NavDropdown>
           </div>
           <div
@@ -357,7 +417,7 @@ function Simulator() {
         </div>
       </div>
       <div style={{ display: 'flex' }}>
-        {tables.francesa.length > 0 && (
+        {tables.francesa && (
           <div
             style={{
               width: '35%',
@@ -380,7 +440,7 @@ function Simulator() {
           </div>
         )}
 
-        {tables.alemana.length > 0 && (
+        {tables.alemana && (
           <div
             style={{
               width: '35%',
