@@ -1,17 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import ArrowLeftLine from '../icons/arrowLeftLine';
 import EditIcon from '../icons/editIcon';
+import { obtenerUsuario } from '../services/apiUsuario';
+import { obtenerInstitucion } from '../services/apiInstitucion';
 
 function Profile() {
-  const institutionName = 'Banco Pichincha';
-  const icon =
-    'https://upload.wikimedia.org/wikipedia/commons/c/cc/Banco-Pichincha.png';
-  const color = '#ffdf00';
-  const email = 'example@example.com';
-  const password = '1234567890';
-  const asterisks = '*'.repeat(password.length);
+  const [email, setEmail] = useState('');
+  const [institutionName, setInstitutionName] = useState('');
+  const [icon, setIcon] = useState('');
+  const [color, setColor] = useState('');
+  //const asterisks = '*'.repeat(password.length);
+
+  obtenerUsuario().then((datos) => {
+    console.log(datos);
+    if (datos.usuario.length > 0) {
+      setEmail(datos.usuario[0].correo);
+    } else {
+      console.error('No se encontraron datos de usuario.');
+    }
+  });
+
+  obtenerInstitucion().then((datos) => {
+    console.log(datos);
+    if (datos.institucion.length > 0) {
+      setInstitutionName(datos.institucion[0].nombreInstitucion);
+      setIcon(datos.institucion[0].logo);
+      setColor(datos.institucion[0].color);
+    } else {
+      console.error('No se encontraron datos de usuario.');
+    }
+  });
 
   return (
     <div>
@@ -170,7 +190,7 @@ function Profile() {
             color: '#666666',
           }}
         >
-          {asterisks}
+          **********
         </text>
       </div>
     </div>
