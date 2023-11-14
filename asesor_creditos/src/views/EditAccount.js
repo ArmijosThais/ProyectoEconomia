@@ -69,7 +69,21 @@ function EditAccount() {
 
   return (
     <div>
-      <Header iconSide={<ArrowLeftLine />} button={'Salir'} destination={'/'} />
+      <Header
+        iconSide={
+          <button
+            style={{
+              border: 'none',
+              backgroundColor: 'white',
+            }}
+            onClick={() => handleReturn()}
+          >
+            <ArrowLeftLine />
+          </button>
+        }
+        button={'Salir'}
+        destination={'/'}
+      />
       <text
         style={{
           fontSize: '30px',

@@ -5,7 +5,10 @@ import ArrowLeftLine from '../icons/arrowLeftLine';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/esm/Button';
-import { actualizarSubcategoria, agregarSubcategoria } from '../services/apiSubcategorias';
+import {
+  actualizarSubcategoria,
+  agregarSubcategoria,
+} from '../services/apiSubcategorias';
 
 const FormularioCredito = () => {
   const navigate = useNavigate();
@@ -33,7 +36,7 @@ const FormularioCredito = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (creditoData) {
-      actualizarSubcategoria(creditoData._id ,formData).then((response) => {
+      actualizarSubcategoria(creditoData._id, formData).then((response) => {
         console.log(response);
         if (response) {
           navigate('/homeadmin');
@@ -50,12 +53,26 @@ const FormularioCredito = () => {
   };
 
   const handleback = () => {
-    console.log(creditoData.nombreSubcategoria);
+    navigate('/homeadmin');
   };
 
   return (
     <div>
-      <Header iconSide={<ArrowLeftLine />} button={'Salir'} destination={'/'} />
+      <Header
+        iconSide={
+          <button
+            style={{
+              border: 'none',
+              backgroundColor: 'white',
+            }}
+            onClick={() => handleback()}
+          >
+            <ArrowLeftLine />
+          </button>
+        }
+        button={'Salir'}
+        destination={'/'}
+      />
       <div style={{ width: '30vw', marginLeft: 'auto', marginRight: 'auto' }}>
         <h3>Datos del Crédito</h3>
         <br />

@@ -4,17 +4,34 @@ import CreditosAdmin from './CreditosAdmin';
 import Header from '../components/Header';
 import Carousel from '../components/slickCarousel';
 import UserIcon from '../icons/user';
+import { useNavigate } from 'react-router-dom';
 
 function HomeAdmin() {
+  const navigate = useNavigate();
+
+  const handleGoToAccountInfo = () => {
+    navigate('/profile');
+  };
+
   return (
     <div>
       <Header
-        iconSide={<UserIcon />}
+        iconSide={
+          <button
+            style={{
+              border: 'none',
+              backgroundColor: 'white',
+            }}
+            onClick={() => handleGoToAccountInfo()}
+          >
+            <UserIcon />
+          </button>
+        }
         button={'Salir'}
         destination={'/'}
       />
       <Carousel />
-      <br/>
+      <br />
       <div>
         <CreditosAdmin />
       </div>

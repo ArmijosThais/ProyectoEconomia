@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import ArrowLeftLine from '../icons/arrowLeftLine';
@@ -11,7 +11,6 @@ function Profile() {
   const [institutionName, setInstitutionName] = useState('');
   const [icon, setIcon] = useState('');
   const [color, setColor] = useState('');
-  //const asterisks = '*'.repeat(password.length);
 
   obtenerUsuario().then((datos) => {
     console.log(datos);
@@ -33,9 +32,27 @@ function Profile() {
     }
   });
 
+  const handleReturn = () => {
+    window.history.back();
+  };
+
   return (
     <div>
-      <Header iconSide={<ArrowLeftLine />} button={'Salir'} destination={'/'} />
+      <Header
+        iconSide={
+          <button
+            style={{
+              border: 'none',
+              backgroundColor: 'white',
+            }}
+            onClick={() => handleReturn()}
+          >
+            <ArrowLeftLine />
+          </button>
+        }
+        button={'Salir'}
+        destination={'/'}
+      />
       <div style={{ display: 'flex', marginTop: '50px', alignItems: 'center' }}>
         <text
           style={{
