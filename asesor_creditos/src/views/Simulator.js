@@ -23,6 +23,16 @@ function Simulator() {
     },
   ];
 
+  var nodesAlemana = [
+    {
+      idd: '0',
+      indirectChargesFeee: '0',
+      interestt: '0.05',
+      capitall: '300',
+      balancee: '500',
+    },
+  ];
+
   const COLUMNS = [
     { label: 'N°', renderCell: (item) => item.id },
     {
@@ -32,6 +42,17 @@ function Simulator() {
     { label: 'INTERÉS', renderCell: (item) => item.interest },
     { label: 'CAPITAL', renderCell: (item) => item.capital },
     { label: 'SALDO', renderCell: (item) => item.balance },
+  ];
+
+  const COLUMNSALEMANA = [
+    { label: 'N°', renderCell: (itemm) => itemm.idd },
+    {
+      label: 'CUOTA + COBROS INDIRECTOS',
+      renderCell: (itemm) => itemm.indirectChargesFeee,
+    },
+    { label: 'INTERÉS', renderCell: (itemm) => itemm.interestt },
+    { label: 'CAPITAL', renderCell: (itemm) => itemm.capitall },
+    { label: 'SALDO', renderCell: (itemm) => itemm.balancee },
   ];
 
   const theme = useTheme(getTheme());
@@ -56,11 +77,11 @@ function Simulator() {
     ],
     alemana: [
       {
-        id: '0',
-        indirectChargesFee: '0',
-        interest: '0.14',
-        capital: '200',
-        balance: '200',
+        idd: '0',
+        indirectChargesFeee: '0',
+        interestt: '0.05',
+        capitall: '300',
+        balancee: '500',
       },
     ],
   });
@@ -72,6 +93,8 @@ function Simulator() {
     capital: '200',
     balance: '200',
   });
+
+  const [dataAlemana, setDataAlemana] = useState({ nodes });
   const [data, setData] = useState({ nodes });
   //var data = { nodes };
   const color = '#ffdf00';
@@ -186,36 +209,31 @@ function Simulator() {
       });
     }
 
-    setData({ nodes });
+    // Dividir el array nodes en dos partes
+    const firstPart = nodes.slice();
+    const secondPart = [];
 
     // Cálculos para amortización alemana
     const principalAlemana = amount / months;
-
-    // Crear la tabla de amortización alemana
-    const tablaAlemana = [];
     let remainingBalanceAlemana = amount;
 
     for (let i = 1; i <= months; i++) {
       const interestAlemana = remainingBalanceAlemana * monthlyRateFrancesa;
       const cuotaAlemana = principalAlemana + interestAlemana;
 
-      tablaAlemana.push({
-        id: i.toString(),
-        indirectChargesFee: cuotaAlemana.toFixed(2).toString(),
-        interest: interestAlemana.toFixed(2).toString(),
-        capital: principalAlemana.toFixed(2).toString(),
-        saldoRestante: (remainingBalanceAlemana -= principalAlemana)
+      secondPart.push({
+        idd: i.toString(),
+        indirectChargesFeee: cuotaAlemana.toFixed(2).toString(),
+        interestt: interestAlemana.toFixed(2).toString(),
+        capitall: principalAlemana.toFixed(2).toString(),
+        balancee: (remainingBalanceAlemana -= principalAlemana)
           .toFixed(2)
           .toString(),
       });
     }
 
-    // Actualizar el estado con las tablas generadas
-    //setTables({ francesa: tablaFrancesa, alemana: tablaAlemana });
-    //nodes.push(tablaFrancesa);
-    //data = { nodes };
-    //setFrancesa({tablaFrancesa});
-    //setAlemana({tablaAlemana});
+    setData({ nodes: firstPart });
+    setDataAlemana({ nodes: secondPart });
   };
 
   return (
@@ -402,7 +420,6 @@ function Simulator() {
             </InputGroup>
           </div>
           <button
-            to="/login"
             style={{
               height: '40px',
               width: '455px',
@@ -422,7 +439,10 @@ function Simulator() {
             }}
             onMouseEnter={handleHover}
             onMouseLeave={handleLeave}
-            onClick={generateTables}
+            onClick={() => {
+              generateTables();
+              console.log(data, dataAlemana);
+            }}
           >
             Generar
           </button>
@@ -471,7 +491,11 @@ function Simulator() {
             >
               Amortización alemana
             </text>
-            <CompactTable columns={COLUMNS} data={data} theme={theme} />
+            <CompactTable
+              columns={COLUMNSALEMANA}
+              data={dataAlemana}
+              theme={theme}
+            />
           </div>
         )}
       </div>
