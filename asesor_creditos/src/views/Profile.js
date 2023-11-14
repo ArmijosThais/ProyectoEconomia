@@ -28,7 +28,7 @@ function Profile() {
       setIcon(datos.institucion[0].logo);
       setColor(datos.institucion[0].color);
     } else {
-      console.error('No se encontraron datos de usuario.');
+      console.error('No se encontraron datos de la institución.');
     }
   });
 

@@ -1,7 +1,17 @@
 import React, { useState } from 'react';
+import { obtenerInstitucion } from '../services/apiInstitucion';
 
 function UpdateCancel({ action, cancel }) {
-  const color = '#ffdf00';
+  const [color, setColor] = useState('');
+
+  obtenerInstitucion().then((datos) => {
+    console.log(datos);
+    if (datos.institucion.length > 0) {
+      setColor(datos.institucion[0].color);
+    } else {
+      console.error('No se encontraron datos de la institución.');
+    }
+  });
   const [hovered, setHovered] = useState(false);
   const backgroundColor = hovered ? lightenColor(color, 0.3) : color;
 

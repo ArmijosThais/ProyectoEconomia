@@ -12,8 +12,20 @@ import { obtenerCategorias } from '../services/apiCategorias';
 import { obtenerSubategorias } from '../services/apiSubcategorias';
 import Spinner from 'react-bootstrap/Spinner';
 import { toast } from 'react-toastify';
+import { obtenerInstitucion } from '../services/apiInstitucion';
 
 function Simulator() {
+  const [color, setColor] = useState('');
+
+  obtenerInstitucion().then((datos) => {
+    console.log(datos);
+    if (datos.institucion.length > 0) {
+      setColor(datos.institucion[0].color);
+    } else {
+      console.error('No se encontraron datos de la institución.');
+    }
+  });
+
   var nodes = [];
 
   const COLUMNS = [
@@ -56,7 +68,6 @@ function Simulator() {
   const [dataAlemana, setDataAlemana] = useState({ nodes });
   const [data, setData] = useState({ nodes });
   //var data = { nodes };
-  const color = '#ffdf00';
   const [hovered, setHovered] = useState(false);
   const backgroundColor = hovered ? lightenColor(color, 0.3) : color;
 

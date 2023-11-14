@@ -1,11 +1,27 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { obtenerInstitucion } from '../services/apiInstitucion';
 
 function Header({ iconSide, button, destination }) {
-  const icon =
-    'https://upload.wikimedia.org/wikipedia/commons/c/cc/Banco-Pichincha.png';
-  const institutionName = 'Banco Pichincha';
-  const color = '#ffdf00';
+  const [institutionName, setInstitutionName] = useState('');
+  const [icon, setIcon] = useState('');
+  const [color, setColor] = useState('');
+
+  obtenerInstitucion().then((datos) => {
+    console.log(datos);
+    if (datos.institucion.length > 0) {
+      setInstitutionName(datos.institucion[0].nombreInstitucion);
+      setIcon(datos.institucion[0].logo);
+      setColor(datos.institucion[0].color);
+    } else {
+      console.error('No se encontraron datos de la institución.');
+    }
+  });
+
+  // const icon =
+  //   'https://upload.wikimedia.org/wikipedia/commons/c/cc/Banco-Pichincha.png';
+  // const institutionName = 'Banco Pichincha';
+  // const color = '#ffdf00';
   const [hovered, setHovered] = useState(false);
   const backgroundColor = hovered ? lightenColor(color, 0.3) : color;
 
