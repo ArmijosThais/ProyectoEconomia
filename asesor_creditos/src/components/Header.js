@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { obtenerInstitucion } from '../services/apiInstitucion';
 
@@ -7,16 +7,18 @@ function Header({ iconSide, button, destination }) {
   const [icon, setIcon] = useState('');
   const [color, setColor] = useState('');
 
-  obtenerInstitucion().then((datos) => {
-    console.log(datos);
-    if (datos.institucion.length > 0) {
-      setInstitutionName(datos.institucion[0].nombreInstitucion);
-      setIcon(datos.institucion[0].logo);
-      setColor(datos.institucion[0].color);
-    } else {
-      console.error('No se encontraron datos de la institución.');
-    }
-  });
+  useEffect(() => {
+    obtenerInstitucion().then((datos) => {
+      console.log(datos);
+      if (datos.institucion.length > 0) {
+        setInstitutionName(datos.institucion[0].nombreInstitucion);
+        setIcon(datos.institucion[0].logo);
+        setColor(datos.institucion[0].color);
+      } else {
+        console.error('No se encontraron datos de la institución.');
+      }
+    });
+  }, []);
 
   // const icon =
   //   'https://upload.wikimedia.org/wikipedia/commons/c/cc/Banco-Pichincha.png';
@@ -34,23 +36,27 @@ function Header({ iconSide, button, destination }) {
   };
 
   function lightenColor(color, factor) {
-    const hexToRgb = (hex) =>
-      hex
-        .replace(/^#/, '')
-        .match(/.{2}/g)
-        .map((x) => parseInt(x, 16));
+    try {
+      const hexToRgb = (hex) =>
+        hex
+          .replace(/^#/, '')
+          .match(/.{2}/g)
+          .map((x) => parseInt(x, 16));
 
-    const rgb = hexToRgb(color);
+      const rgb = hexToRgb(color);
 
-    const lightenedRgb = rgb.map((value) =>
-      Math.round(value + (255 - value) * factor)
-    );
+      const lightenedRgb = rgb.map((value) =>
+        Math.round(value + (255 - value) * factor)
+      );
 
-    const lightenedHex = `#${lightenedRgb
-      .map((x) => x.toString(16).padStart(2, '0'))
-      .join('')}`;
+      const lightenedHex = `#${lightenedRgb
+        .map((x) => x.toString(16).padStart(2, '0'))
+        .join('')}`;
 
-    return lightenedHex;
+      return lightenedHex;
+    } catch {
+      return '#000000';
+    }
   }
 
   return (

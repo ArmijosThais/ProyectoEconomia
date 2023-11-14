@@ -123,23 +123,27 @@ function Simulator() {
   }, [selectedType]);
 
   function lightenColor(color, factor) {
-    const hexToRgb = (hex) =>
-      hex
-        .replace(/^#/, '')
-        .match(/.{2}/g)
-        .map((x) => parseInt(x, 16));
+    try {
+      const hexToRgb = (hex) =>
+        hex
+          .replace(/^#/, '')
+          .match(/.{2}/g)
+          .map((x) => parseInt(x, 16));
 
-    const rgb = hexToRgb(color);
+      const rgb = hexToRgb(color);
 
-    const lightenedRgb = rgb.map((value) =>
-      Math.round(value + (255 - value) * factor)
-    );
+      const lightenedRgb = rgb.map((value) =>
+        Math.round(value + (255 - value) * factor)
+      );
 
-    const lightenedHex = `#${lightenedRgb
-      .map((x) => x.toString(16).padStart(2, '0'))
-      .join('')}`;
+      const lightenedHex = `#${lightenedRgb
+        .map((x) => x.toString(16).padStart(2, '0'))
+        .join('')}`;
 
-    return lightenedHex;
+      return lightenedHex;
+    } catch {
+      return '#000000';
+    }
   }
 
   const generateTables = () => {
