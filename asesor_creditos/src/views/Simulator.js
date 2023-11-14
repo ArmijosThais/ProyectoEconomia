@@ -13,25 +13,7 @@ import { obtenerSubategorias } from '../services/apiSubcategorias';
 import Spinner from 'react-bootstrap/Spinner';
 
 function Simulator() {
-  var nodes = [
-    {
-      id: '0',
-      indirectChargesFee: '0',
-      interest: '0.14',
-      capital: '200',
-      balance: '200',
-    },
-  ];
-
-  var nodesAlemana = [
-    {
-      idd: '0',
-      indirectChargesFeee: '0',
-      interestt: '0.05',
-      capitall: '300',
-      balancee: '500',
-    },
-  ];
+  var nodes = [];
 
   const COLUMNS = [
     { label: 'N°', renderCell: (item) => item.id },
@@ -66,32 +48,8 @@ function Simulator() {
   const [amounti, setAmount] = useState('');
   const [monthsi, setMonths] = useState('');
   const [tables, setTables] = useState({
-    francesa: [
-      {
-        id: '0',
-        indirectChargesFee: '0',
-        interest: '0.14',
-        capital: '200',
-        balance: '200',
-      },
-    ],
-    alemana: [
-      {
-        idd: '0',
-        indirectChargesFeee: '0',
-        interestt: '0.05',
-        capitall: '300',
-        balancee: '500',
-      },
-    ],
-  });
-  //const [nodes, setNodes] = useState({});
-  const [alemana, setAlemana] = useState({
-    id: '0',
-    indirectChargesFee: '0',
-    interest: '0.14',
-    capital: '200',
-    balance: '200',
+    francesa: [],
+    alemana: [],
   });
 
   const [dataAlemana, setDataAlemana] = useState({ nodes });
@@ -185,6 +143,7 @@ function Simulator() {
 
     // Cálculos para amortización francesa
     const rateFrancesa = selectedCredit.tasaInteres; // Tasa de interés anual (ejemplo)
+    console.log(selectedCredit.tasaInteres);
     const monthlyRateFrancesa = rateFrancesa / 12 / 100; // Tasa de interés mensual
     const monthlyPaymentFrancesa =
       (amount * monthlyRateFrancesa) /

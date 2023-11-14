@@ -267,7 +267,7 @@ function CreditosAdmin() {
           <p>
             {creditos && creditos.mensaje
               ? 'No hay datos de créditos disponibles.'
-              : 'No hay datos de créditos disponibles.'}
+              : 'Seleccione una categoría de crédito.'}
           </p>
         )}
       </div>
