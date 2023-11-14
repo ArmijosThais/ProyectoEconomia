@@ -151,10 +151,10 @@ function Simulator() {
       if (
         isNaN(amount) ||
         isNaN(months) ||
-        amount <= selectedCredit.montoMinimo ||
+        amount < selectedCredit.montoMinimo ||
         months <= 0 ||
-        amount >= selectedCredit.montoMaximo ||
-        months >= selectedCredit.plazoMaximo
+        amount > selectedCredit.montoMaximo ||
+        months > selectedCredit.plazoMaximo
       ) {
         toast.error('Ingrese valores válidos para monto y meses.', {
           position: 'top-right',
@@ -388,9 +388,10 @@ function Simulator() {
                     fontSize: '15px',
                     display: 'flex',
                     marginRight: '97px',
+                    color: '#666666',
                   }}
                 >
-                  Entre {selectedCredit.montoMinimo} y
+                  Entre {selectedCredit.montoMinimo} y{' '}
                   {selectedCredit.montoMaximo}
                 </text>
               )}
@@ -434,6 +435,7 @@ function Simulator() {
                     fontSize: '15px',
                     display: 'flex',
                     marginRight: '97px',
+                    color: '#666666',
                   }}
                 >
                   Máximo {selectedCredit.plazoMaximo}
